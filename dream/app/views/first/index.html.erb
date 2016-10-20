@@ -175,14 +175,12 @@
 	   .attr("fill", "red");	
 
 
-        var xAxis = d3.svg.axis()
+        var xAxis = d3.axisBottom()
                         .scale(xScale)
-                        .orient("bottom")
                         .ticks(5);
 
-        var yAxis = d3.svg.axis()
+        var yAxis = d3.axisLeft()
                         .scale(yScale)
-                        .orient("left")
                         .ticks(5);
 
         svg.append("g")
