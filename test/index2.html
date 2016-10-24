@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+<body>
+<div id="graph">
+<script>
+
+	d3.csv("dream.csv", function(error,data){
+		data.forEach(function(d) 
+		{ d.frequency = +d.frequency;
+		  d.memory = +d.memory;
+		  d.action = +d.action;
+		  d.lucid = +d.lucid;
+		  d.dejavu = +d.dejavu;});
+
+	var w = 500;
+	var h = 300;
+	var padding = 5;
+
+	var number =[[],[],[],[]];
+	var f, m;
+
+	for(var x=0; i<data.length; i++){
+		f = data[i].frequency;
+		m = data[i].memory;
+		number[f][m]++;
+	}
+
+	var maxX = d3.max(data, function(d) {return d.frequency;});
+	var maxY = d3.max(data, function(d) {return d.memory;});
+	var maxR = d3.max(data, function(d) {return d.lucid;});
+
+	var xScale = d3.scaleLinear()
+			.domain([0, maxX])
+			.range([padding, w-padding*2]);
+	var yScale = d3.scaleLinear()
+			.domain([0, maxY])
+			.range([h-padding, padding]);
+	var rScale = d3.scaleLinear()
+			.domain([0, maxR])
+			.range([1, 8]);
+
+	var svg = d3.select("body")
+				.append("svg")
+				.attr("width", w)
+				.attr("height", h);
+
+	svg.selectAll("circle")
+		.data(data)
+		.enter()
+		.append("circle")
+		.attr("cx", function(d) {return xScale(d.frequency;})
+		.attr("cy", function(d) {return yScale(d.memory;})
+		.attr("r", function(d) {return rScale(number[d.frequency][d.memory]);
+
+	var xAxis = d3.axisBottom()
+				.scale(xScale)
+				.ticks(5);
+	var yAxis = d3.axisLeft()
+				.scale(yScale)
+				.ticks(5);
+
+	svg.append("g")
+		.attr("class", "axis")
+		.attr("transform", "translate(0," + (h-padding) +")")
+		.call(xAixs);
+
+	svg.append("g")
+		.attr("class", "axis")
+		.attr("transform", "translate(" + padding + ",0")
+		.call(yAxis);
+
+	});
+
+
+</script>
+</div>
+</body>
+</html>
+
