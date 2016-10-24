@@ -35,10 +35,29 @@ var yScale = d3.scaleLinear()
 		.domain([0, maxY])
 		.range([h-padding, padding]);
 
+var xAxis = d3.axisBottom()
+    .scale(xScale)
+    .ticks(5);
+
+var yAxis = d3.axisLeft()
+    .scale(yScale)
+    .ticks(5);
+
+
+var tooltip = d3.select("#graph")
+	.append("div")
+	.attr("class", "d3-tip");
+
+tooltip.append("div")
+	.attr("id", "artist");
+
+tooltip.append("div")
+	.attr("id", "title");
+
 var svg = d3.select("#graph")
-	.append("svg")
-	.attr("width", w)
-	.attr("height", h);
+    .append("svg")
+    .attr("width", w)
+    .attr("height", h);
 
 svg.selectAll("circle")
 	.data(data)
@@ -46,21 +65,32 @@ svg.selectAll("circle")
 	.append("circle")
 	.attr("cx", function(d) {return xScale(d.valance);})
 	.attr("cy", function(d) {return yScale(d.arousal);})
-	.attr("r", 1)
+	.attr("r", 10)
 	.attr("fill", "black")
+	.on("mouseover", function(d) {
+		d3.select(this)
+			.attr("fill", "orange");
+
+		var xPosition = parseFloat(d3.select(this).attr("x"))+10;
+		var yPosition = parseFloat(d3.select(this).attr("y"))/2;
+
+		tooltip.select("#artist").html(d.artist);
+		tooltip.select("#title").html(d.title);
+
+		tooltip.style("display", "block");
+	})
+	.on("mouseout", function() {
+		d3.select(this)
+			.attr("fill", "black");
+
+		tooltip.style("display", "none");
+	})
 	.on("click", function() {
 		d3.select(this)
 		.style("fill", "orange")
 		.attr("r", 20)
 	});
-	
-var xAxis = d3.axisBottom()
-	.scale(xScale)
-	.ticks(5);
 
-var yAxis = d3.axisLeft()
-	.scale(yScale)
-	.ticks(5);
 
 svg.append("g")
 	.attr("class", "axis")
